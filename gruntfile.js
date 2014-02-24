@@ -85,6 +85,12 @@ module.exports = function(grunt) {
 			},
 		},
 	},
+	typescript: {
+		base: {
+			src: ['src/**/*.ts'],
+			dest: 'build'
+		}
+	}
   });
   
   // Load the plugin that provides the "uglify" task.
@@ -93,6 +99,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-typescript');
   // Default task(s).
   
   grunt.event.on('watch', function(action, filepath, target) {
