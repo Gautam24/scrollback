@@ -45,7 +45,8 @@
     "passport": "~0.2.0",
     "passport-twitter": "~1.0.2",
     "twit": "~1.1.12",
-    "objectlevel": "x"
+    "objectlevel": "x",
+	"typescript": "x"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -55,7 +56,9 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-less": "~0.7.0",
     "browserify": "~3.24.6",
-    "grunt-browserify": "~1.3.0"
+    "grunt-browserify": "~1.3.0",
+	"gulp" : "x",
+	"gulp-tsc": "x"
   },
   "optionalDependencies": {},
   "license": "AGPL",
