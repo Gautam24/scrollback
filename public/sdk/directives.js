@@ -57,9 +57,13 @@ scrollbackApp.directive('message',function($compile, $timeout) {
             attr.$observe('text', function(value) {
 				$scope.slashMe = (/^\/me/.test(value));
                 $scope.text = value;
+				$scope.nick = "";
                 if($scope.slashMe) {
-                    value = $scope.text = $scope.text.replace(/^\/me/, $scope.from);
-                    $scope.nick = ""; 
+					$timeout(function(){
+						console.log("Slashme", $scope.slashMe, "$scope.from", $scope.from, $scope.text[0].text);
+						value = $scope.text[0].text = $scope.text[0].text.replace(/^\/me/, $scope.from);
+                    	$scope.nick = "";
+					});
                 }else {
                     $scope.nick = $scope.from; 
                 }
@@ -190,15 +194,17 @@ scrollbackApp.directive('whenScrolledUp', [function() {
         
         $(document).ready(function() {
             $('.column').fixInView();
-            $('#body').nudgeInView(-$('#body').outerHeight() + $(window).innerHeight());
             $('#body').bind('reposition', function(e) {
-                if(e.above < 150 && e.by<0) {
+                if(e.above < 250 && e.by<0) {
+					$('#body').anchorBottom();
+					console.log("loading more up");
                     scope.$apply(attr.whenScrolledUp);
-                    $('#body').nudgeInView(-$('#body').outerHeight() + e.height);
+                //    $('#body').nudgeInView(-$('#body').outerHeight() + e.height);
                 }
-                else if(e.below < 30) {
+                else if(e.below < 250 && e.by>0) {
+					$('#body').anchorTop();
+					console.log("loading more down");
 					scope.$apply(attr.whenScrolledDown);
-					$('#body').nudgeInView(1);
                 }
             });
         });

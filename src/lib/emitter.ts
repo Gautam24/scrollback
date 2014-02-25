@@ -61,14 +61,17 @@ var handlers = {}, catSeq = {
 },catIx ={}, i;
 
 function fire (listeners, data, i, cb) {
+	var timer;
 	if(i < listeners.length) {
+		timer = setTimeout(function() { 
+			console.log("LISTENER TIMED OUT!", i);
+			timer = null;
+		}, 1000);
 		listeners[i](data, function(err, res) {
-
-			// if err is boolean and true, then it means that we got the results and stop calling other plugins.
-			if (err === true) {
-				if(cb)	return cb(null, res);
-				else return;
-			} else if(err) {
+			if(timer) clearTimeout(timer);
+			else { console.log("LISTENER CAME BACK AFTER TIMEOUT"); }
+			
+			if(err) {
 				if(cb)	return cb(err, data);
 				else return;
 			} 
@@ -84,7 +87,7 @@ module.exports = {
         if (handlers[event]) {
 			fire(handlers[event], data, 0, cb);
         } else {
-			cb();
+			cb(null, data);
 		}
     },
     on: function (event, callback, cat) {
