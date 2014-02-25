@@ -7,7 +7,8 @@ var names = require("../lib/names.js");
 /*****************************************************************************
 
 This file perform tests on the validator plugin based on the new schema.
-Validator plugin will test all actions. throw errors if critical properties are missing and fill the properties if it can.
+Validator plugin will listen for all actions. throw errors if critical properties are missing and fill the properties if it can.
+should be the first app for all types of messages.
 
 
 for text|back|away|join|part|admit|expel|room|user|edit|init actions:
@@ -38,7 +39,7 @@ for join
 	properties that the plugin can fill
 		role  -> if not present then set it to followers.
 
-for join
+for part
 	properties that the plugin can fill
 		role  -> if not present then set it to none.
 
@@ -58,23 +59,22 @@ for expel
 for init
 	?????????????????
 *****************************************************************************/
-
-describe.only('validator', function() {
-	it('Should throw and error if TYPE is undefined', function(done) {
+describe('validator', function() {
+	it('Should throw an error if TYPE is undefined', function(done) {
 		core.emit("text",{id:guid()}, function(err, data) {
 			assert(err, "Error not thrown");
 			assert.equal(err.message, "TYPE_NOT_SPECIFIED", "Error message is incorrect");
 			done();
 		});
 	});
-	it('Should throw and error if FROM is undefined', function(done) {
+	it('Should throw an error if FROM is undefined', function(done) {
 		core.emit("text",{id:guid(),type:"text", from: names(6)}, function(err, data) {
 			assert(err, "Error not thrown");
 			assert.equal(err.message, "FROM_NOT_SPECIFIED", "Error message is incorrect");
 			done();
 		});
 	});
-	it('Should throw and error if TO is undefined', function(done) {
+	it('Should throw an error if TO is undefined', function(done) {
 		core.emit("text",{id:guid(),type:"text",from: names(6)}, function(err, data) {
 			assert(err, "Error not thrown");
 			assert.equal(err.message, "TO_NOT_SPECIFIED", "Error message is incorrect");
@@ -82,18 +82,118 @@ describe.only('validator', function() {
 		});
 	});
 
-	it('Should throw and error if SESSION is undefined', function(done) {
+	it('Should throw an error if SESSION is undefined', function(done) {
 		core.emit("text",{id:guid(),type:"text",from: names(6), to:names(6)}, function(err, data) {
 			assert(err, "Error not thrown");
 			assert.equal(err.message, "SESSION_NOT_SPECIFIED", "Error message is incorrect");
 			done();
 		});
 	});
-	it('Should throw and error if set id if it is undefined', function(done) {
+	it('Should throw an error if text is undefined', function(done) {
+		core.emit("text",{id:guid(),type:"text",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(err, "Error not thrown");
+			assert.equal(err.message, "TEXT_NOT_SPECIFIED", "Error message is incorrect");
+			done();
+		});
+	});
+	it('Should set id to some value if it is undefined', function(done) {
 		core.emit("text",{type:"text",from: names(6), 
 			to: names(6), session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
 				assert(!err,"ERROR thrown when it shouldnt.");
-				assert(data.id, "ID not set by validator")
+				assert(data.id, "ID not set by validator");
+		});
+	});
+	it('Should set time to current time if it is undefined', function(done) {
+		core.emit("text",{id:guid(),type:"text",from: names(6), 
+			to: names(6), session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+				assert(!err,"ERROR thrown when it shouldnt.");
+				assert(data.time, "time not set by validator");
+		});
+	});
+	it('Should not throw an err when all the properties are set correctly', function(done) {
+		core.emit("text",{id:guid(),type:"text",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn",text:"hi there... how are you?" }, function(err, data) {
+			assert(!err, "Message not sent");
+			done();
+		});
+	});
+	it('Should set role to "follower" if it is undefined', function(done) {
+		core.emit("join",{id:guid(),type:"join",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err, "Error thrown when it shouldnt");
+			assert.equal(data.role !=="follower","Not setting the default value for role correctly")
+			done();
+		});
+	});
+	it('Should set role to "none" if it is undefined', function(done) {
+		core.emit("part",{id:guid(),type:"part",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err, "Error thrown when it shouldnt");
+			assert.equal(data.role !=="none","Not setting the default value for role correctly")
+			done();
+		});
+	});
+	it('Should throw an error if ref is undefined', function(done) {
+		core.emit("admit",{id:guid(),type:"admit",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(err, "Error not thrown");
+			assert.equal(err.message, "REF_NOT_SPECIFIED", "Error message is incorrect");
+			done();
+		});
+	});
+	it('Should set role to "follow_invited" if it is undefined', function(done) {
+		core.emit("admit",{id:guid(),type:"admit",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err, "Error thrown when it shouldnt");
+			assert.equal(data.role !=="follow_invited","Not setting the default value for role correctly")
+			done();
+		});
+	});
+	it('Should set role to "banned" if it is undefined', function(done) {
+		core.emit("expel",{id:guid(),type:"expel",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err, "Error thrown when it shouldnt");
+			assert.equal(data.role !=="banned","Not setting the default value for role correctly")
+			done();
+		});
+	});
+	it('Should throw an error if ref is undefined', function(done) {
+		core.emit("edit",{id:guid(),type:"edit",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(err, "Error not thrown");
+			assert.equal(err.message, "REF_NOT_SPECIFIED", "Error message is incorrect");
+			done();
+		});
+	});
+	it('Should throw an error if both text and label is undefined', function(done) {
+		core.emit("edit",{id:guid(),type:"edit",from: names(6), to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(err, "Error not thrown");
+			assert.equal(err.message, "NOTHING_CHANGED", "Error message is incorrect");
+			done();
+		});
+	});
+	it('Should throw an error if the edit doesnt cause a change.', function(done) {
+			core.emit("edit",{id:guid(),type:"edit",from: names(6), labels:{},to:names(6),  
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(err, "Error not thrown");
+			assert.equal(err.message, "NOTHING_CHANGED", "Error message is incorrect");
+			done();
+		});
+	});
+	it('Should not throw an error if one of the following is specified: text, label', function(done) {
+			core.emit("edit",{id:guid(),type:"edit",from: names(6), to:names(6), text:"hiihi", 
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err,"ERROR thrown when it shouldnt.");
+			done();
+		});
+	});
+	it('Should not throw an error if one of the following is specified: text, label', function(done) {
+			core.emit("edit",{id:guid(),type:"edit",from: names(6), to:names(6), label:{hi:1},
+			session:"web:127.0.0.1:ajsdbhciahnasjdnfn"}, function(err, data) {
+			assert(!err,"ERROR thrown when it shouldnt.");
+			done();
 		});
 	});
 });

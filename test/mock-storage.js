@@ -1,13 +1,11 @@
-
-
-var core;
+var core = require("../test/mock-core.js")();
 var rooms = {
 	"scrollback": {
 		id:"scrollback",
 		description:"this is room",
 		type:"room",
 		identities:["irc://harry.scrollback.io/#scrollback"],
-		timezone: 330,
+		timezone: 300,
 		params:{}
 	}
 };
@@ -23,7 +21,7 @@ var users = {
 	}
 };
 
-module.export = function(c) {
+module.exports = function(c) {
 	core = c;
 	core.on("getRooms",function(payload, callback) {		
 		if(payload.id) {
@@ -33,14 +31,22 @@ module.export = function(c) {
 			}
 		}
 		callback();
-	});
+	},"storage");
 	core.on("getUsers",function(payload, callback) {
 		if(payload.id) {
 			payload.results = [];
 			if(users[payload.id]) {
-				payload.results.push(rooms[payload.id]);
+				payload.results.push(users[payload.id]);
 			}
 		}
 		callback();
-	});
+	},"storage");
+	core.on("room", function(data, callback) {
+		rooms[data.id] = data;
+		callback();
+	},"storage");
+	core.on("user", function(data, callback) {
+		users[data.id] = data;
+		callback();
+	},"storage");
 }
