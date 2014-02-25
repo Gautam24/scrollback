@@ -5,7 +5,7 @@ var longest = 0;
 
 module.exports = function(core) {
 	var pluginContent = "";
-	fs.readFile(__dirname + "/wordban.html", "utf8", function(err, data){
+	fs.readFile("../templates/wordban.html", "utf8", function(err, data){
 		if(err)	throw err;
 		core.on("http/init", function(payload, callback) {
             payload.wordban = {

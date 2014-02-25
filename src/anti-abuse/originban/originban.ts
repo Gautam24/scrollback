@@ -5,10 +5,10 @@ var blockOrigins={};
 module.exports = function(core) {
 	var pluginContent = "";
 	init();
-	fs.readFile(__dirname + "/originban.jade", "utf8", function(err, data){
+	fs.readFile("../templates/originban.jade", "utf8", function(err, data){
 		if(err)	throw err;
 		//this is a function object.
-		pluginContent = jade.compile(data,  {basedir: process.cwd()+'/http/views/' });
+		pluginContent = jade.compile(data,  {basedir:'../templates' });
 		// core.on("config", function(payload, callback) {
 		// 	log("Heard \"config event\"");
   //           payload.originban = pluginContent;

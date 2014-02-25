@@ -27,7 +27,7 @@ var express = require("express"),
 exports.init = function() {
 	var app = express(), srv, srvs;
 
-	app.set('views', __dirname + '/views');
+	app.set('views', '../templates');
 	app.set('view engine', 'jade');
 	app.set('view options', { debug: true });
 	

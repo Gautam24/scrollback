@@ -85,10 +85,10 @@ module.exports = function(grunt) {
 			},
 		},
 	},
-	typescript: {
-		base: {
-			src: ['src/**/*.ts'],
-			dest: 'build'
+	ts: {
+		dev : {
+			src: ["src/**/*.ts"],
+			outDir: ["build"]
 		}
 	}
   });
@@ -99,13 +99,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-typescript');
+  grunt.loadNpmTasks('grunt-ts');
   // Default task(s).
   
   grunt.event.on('watch', function(action, filepath, target) {
 		grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
   });
-  grunt.registerTask('default', ['uglify', 'concat', 'wrap', 'less']);
+  grunt.registerTask('default', ['uglify', 'concat', 'wrap', 'less', 'ts']);
   
 
 };

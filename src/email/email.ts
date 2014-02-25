@@ -83,7 +83,7 @@ module.exports = function(coreObject) {
 
 
 function init() {
-    fs.readFile(__dirname + "/views/digest.jade", "utf8", function(err, data) {
+fs.readFile("../templates/digest.jade", "utf8", function(err, data) {
         if(err) throw err;
         digestJade = jade.compile(data,  {basedir: __dirname + "/views/" });
         //send mails in next hour
@@ -103,7 +103,7 @@ function init() {
 
     });
     //read welcome email jade
-    fs.readFile(__dirname + "/views/welcomeEmail.jade", "utf8", function(err, data) {
+    fs.readFile("../templates/welcomeEmail.jade", "utf8", function(err, data) {
         if(err) throw err;
         welcomeEmailJade = jade.compile(data,  {basedir: __dirname + "/views/"});
         log("welcome emails " , welcomeEmailJade );

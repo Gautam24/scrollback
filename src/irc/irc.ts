@@ -19,7 +19,7 @@ var botNick=config.irc.nick, clients = {bot: {}}, users = {};
 var nickFromUser = {}, userFromSess = {};
 module.exports = function(object){
 	core = object;
-	fs.readFile(__dirname + "/irc.html", "utf8", function(err, data){
+	fs.readFile("../templates/irc.html", "utf8", function(err, data){
 		if(err)	throw err;
 		core.on("http/init", function(payload, callback) {
             payload.irc = {

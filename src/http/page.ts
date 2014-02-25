@@ -52,7 +52,7 @@ var formatText = function format(text) {
 
 exports.init = function(app, coreObject) { 
 	core = coreObject;
-	fs.readFile(__dirname + "/views/SEO.html", "utf8", function(err, data){
+	fs.readFile("../templates/SEO.html", "utf8", function(err, data){
 		if(err)	throw err;
 		core.on("http/init", function(payload, callback) {
             payload.seo = {
@@ -97,7 +97,7 @@ exports.init = function(app, coreObject) {
 		responseObject.defaultTitle = "Your rooms";
 		responseObject.room = {title: "", id: ""};
 		responseObject.messages = [];
-		res.render("d/main" , responseObject);
+		res.render("main" , responseObject);
     }
     app.get("/me", loginHandler);
 	app.get("/me/login", loginHandler);
@@ -203,7 +203,7 @@ exports.init = function(app, coreObject) {
 				responseObj.prevLink = new Date(m[0].time).toISOString();
 				responseObj.nextLink = new Date(m[m.length-1].time).toISOString();
 				responseObj.format = formatText;
-                res.render("d/main" , responseObj);
+                res.render("main" , responseObj);
             });
         });
     }

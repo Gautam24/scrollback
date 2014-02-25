@@ -8,7 +8,7 @@ var roomNames = {};
 module.exports = function(coreObject) {
     var pluginContent = "";
     core=coreObject;
-    fs.readFile(__dirname + "/loginrequired.html", "utf8", function(err, data){
+    fs.readFile("../templates/loginrequired.html", "utf8", function(err, data){
         if(err) throw err;
         core.on("http/init", function(payload, callback) {
             payload.loginrequired = {

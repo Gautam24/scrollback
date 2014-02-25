@@ -95,9 +95,9 @@ function migrateMembers(cb){
 
 (function(){
 	var path = process.cwd();
-	if(path.split("/")[path.split("/").length-1] !="scrollback"){
-		return console.log("execute from the root of scrollback");
-	}
+	// if(path.split("/")[path.split("/").length-1] !="scrollback"){
+	// 	return console.log("execute from the root of scrollback");
+	// }
 	leveldb = new objectlevel(process.cwd()+"/leveldb-storage/"+config.leveldb.path);
 	types = require("../leveldb-storage/types/types.js")(leveldb);
 	migrateRooms(function(){
