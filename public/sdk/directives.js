@@ -60,7 +60,6 @@ scrollbackApp.directive('message',function($compile, $timeout) {
 				$scope.nick = "";
                 if($scope.slashMe) {
 					$timeout(function(){
-						console.log("Slashme", $scope.slashMe, "$scope.from", $scope.from, $scope.text[0].text);
 						value = $scope.text[0].text = $scope.text[0].text.replace(/^\/me/, $scope.from);
                     	$scope.nick = "";
 					});
