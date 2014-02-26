@@ -5,6 +5,7 @@
 /* global document */
 /*jshint smarttabs:true */
 
+
 var __glo_prevtime = 0;
 
 scrollbackApp.directive('message',function($compile, $timeout) {
@@ -61,7 +62,7 @@ scrollbackApp.directive('message',function($compile, $timeout) {
                 if($scope.slashMe) {
 					$timeout(function(){
 						value = $scope.text[0].text = $scope.text[0].text.replace(/^\/me/, $scope.from);
-                    	$scope.nick = "";
+						$scope.nick = "";
 					});
                 }else {
                     $scope.nick = $scope.from; 
@@ -125,11 +126,13 @@ scrollbackApp.directive('message',function($compile, $timeout) {
 								var menu = $("<div>").addClass('menu').addClass('clearfix');
 								var arrow = $("<div>").addClass('arrow').appendTo(menu);
 								
-								for(var i in opt) {
-									$("<button>").addClass('menuitem').text(i).click( {option: i}, function(event) {
+								var hideOnClick = function(event) {
 										opt[event.data.option]();
 										hide();
-									}).appendTo(menu);
+								};
+								
+								for(var i in opt) {
+									$("<button>").addClass('menuitem').text(i).click( {option: i}, hideOnClick).appendTo(menu);
 								}
 								
 								$('body').append(layer, menu);
