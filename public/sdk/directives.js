@@ -3,8 +3,8 @@
 /* global angular */
 /* global window */
 /* global document */
-/*jshint smarttabs:true */
-
+/* jshint smarttabs:true */
+/* jshint unused:false */
 
 var __glo_prevtime = 0;
 
@@ -220,7 +220,7 @@ scrollbackApp.directive('conversationStyles', function(){
 		scope: {
 			conversations : '='
 		},
-		link: function($scope, elem, attrs){
+		link: function($scope, elem, attr){
 			$scope.$watch('conversations', function(value){
 				if(!value) return;
 				var str = "";

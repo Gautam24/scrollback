@@ -61,7 +61,6 @@ module.exports = function(core) {
                 if(action.user) {
                     redisProxy.set("user:{{"+action.user.id+"}}", JSON.stringify(action.user));
                 }
-
             }
          
 
