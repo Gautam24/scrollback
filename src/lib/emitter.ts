@@ -73,7 +73,7 @@ function fire (listeners, data, i, cb) {
 			if(err ===true ) {
 				if(cb)	return cb(null, res);
 				else return;
-			if(err) {
+			}else if(err) {
 				if(cb)	return cb(err, data);
 				else return;
 			} 
